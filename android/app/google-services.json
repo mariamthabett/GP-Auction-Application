@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17676821943",
+    "project_id": "philo-task",
+    "storage_bucket": "philo-task.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17676821943:android:1c7d7c89f75571c483f432",
+        "android_client_info": {
+          "package_name": "com.example.philo_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzEWCJABG3bZzm-x-0yjQjzyssgxsLfpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

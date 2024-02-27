@@ -25,19 +25,19 @@ ThemeData get appTheme => ThemeData(
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(0.r),
         borderSide: BorderSide(
           color: ColorsManager.greyLight,
         ),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(0.r),
         borderSide: BorderSide(
           color: ColorsManager.grey,
         ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(0.r),
         borderSide: BorderSide(
           color: ColorsManager.greyLight,
         ),

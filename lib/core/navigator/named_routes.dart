@@ -5,11 +5,15 @@ enum NamedRoutes {
   // //onBoarding
   // onBoarding('/onBoarding'),
   // //login
-  // login('/login'),
+  login('/login'),
+  // //register
+  register('/register'),
   // //layout
   // layout('/layout'),
   // //home
-  // home('/home'),
+  home('/home'),
+  //favouites
+  favourites('/favourites'),
   // //notifications
   // notifications('/notifications'),
   // //account info

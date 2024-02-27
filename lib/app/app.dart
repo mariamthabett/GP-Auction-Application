@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:philo_task/core/constants/constants.dart';
 import 'package:philo_task/core/internet/internet_connection_checker.dart';
 import 'package:philo_task/core/theming/theme_manager.dart';
-import '../core/navigator/named_routes.dart';
 import '../core/navigator/navigator.dart';
 import '../core/navigator/route_generator.dart';
 import '../core/navigator/route_observer.dart';
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
               navigatorKey: Go.navigatorKey,
 
               onGenerateRoute: RouterGenerator.getRoute,
-              initialRoute: NamedRoutes.splash.routeName,
+              // initialRoute: NamedRoutes.splash.routeName,
               theme: appTheme,
             ));
   }
