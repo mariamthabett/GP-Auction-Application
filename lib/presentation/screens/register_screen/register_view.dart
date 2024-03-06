@@ -44,7 +44,7 @@ class _RegisterViewState extends State<RegisterView> {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Heading2(text: 'Welcome to fashion daily'),
+          const Heading2(text: 'Welcome to Mzad'),
           const CustomHeading1(text: 'Register'),
           8.verticalSpace,
           PersonalTextField(
