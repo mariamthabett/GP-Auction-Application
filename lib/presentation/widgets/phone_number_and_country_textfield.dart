@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../../core/res/color_manger.dart';
 
 class PhoneCountryTextField extends StatelessWidget {
-  const PhoneCountryTextField({Key? key}) : super(key: key);
+  const PhoneCountryTextField({Key? key, this.controller, this.validator}) : super(key: key);
+
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,11 @@ class PhoneCountryTextField extends StatelessWidget {
           ),
           child: SizedBox(
               height: MediaQuery.of(context).size.height * .05,
-              child: TextFormField()),
+              child: TextFormField(
+                controller: controller,
+                validator: validator,
+
+              )),
         ),
       ],
     );

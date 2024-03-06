@@ -1,6 +1,12 @@
+import 'dart:developer';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:philo_task/core/helpers/firebase_firestore_helper.dart';
+import 'package:philo_task/models/product.dart';
 import 'package:philo_task/presentation/widgets/custom_appbar.dart';
+import 'package:philo_task/presentation/widgets/product_item.dart';
 
 /// `PostsView` is a stateful widget that displays a list of posts.
 ///
@@ -15,20 +21,74 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final scrollController = ScrollController();
+  List<ProductModel> allProducts = [];
+  List<ProductModel> searchedProducts = [];
+  //contr
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _initProducts();
+    });
     super.initState();
-    // _loadPosts();
-    // _setupScrollListener();
+  }
+
+  _initProducts() async {
+    allProducts = await DatabaseHelper.getProducts();
+    log('Products Fetched ${allProducts[0].title}');
+    setState(() {});
+  }
+
+  _buildProductsList() {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 370,
+        enlargeCenterPage: true,
+        disableCenter: true,
+        viewportFraction: .75,
+      ),
+      items: List.generate(
+        searchedProducts.isEmpty ? allProducts.length : searchedProducts.length,
+        (index) => ProductItem(
+          key: ValueKey(allProducts[index].sId),
+          index: index,
+          product: searchedProducts.isEmpty
+              ? allProducts[index]
+              : searchedProducts[index],
+          allProducts:
+              searchedProducts.isEmpty ? allProducts : searchedProducts,
+          inFavScreen: false,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(),
-        body: Container(),
+        appBar: CustomAppBar(
+          onChanged: (p0) {
+            setState(() {
+              searchedProducts = allProducts
+                  .where((element) => element.title!.contains(p0))
+                  .toList();
+            });
+          },
+          controller: _searchController,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              // _buildHeader(),
+              _buildProductsList(),
+            ],
+          ),
+        ),
       ),
     );
   }

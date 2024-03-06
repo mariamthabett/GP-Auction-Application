@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:philo_task/core/theming/colors.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({super.key});
+  const CustomTextField({super.key, this.onChanged, this.controller});
+  final Function(String)? onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,10 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(
           color: ColorsManager.grey, borderRadius: BorderRadius.circular(16.r)),
       child: TextFormField(
-        onChanged: (value) {
-          // RouterGenerator.postsCubit.searchPosts(value);
-        },
+controller: controller,
+        onChanged: onChanged,
+
+
         onTapOutside: (event) => FocusScope.of(context).unfocus(),
         decoration: InputDecoration(
           hintText: 'Search',

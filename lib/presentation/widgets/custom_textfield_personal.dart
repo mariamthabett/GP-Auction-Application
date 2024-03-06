@@ -14,7 +14,7 @@ class PersonalTextField extends StatelessWidget {
     this.width = 0.92,
     this.height = 0.06,
     this.borderColore = ColorManager.myLightTeal,
-    this.suffixIcon,
+    this.suffixIcon, this.validator,
   }) : super(key: key);
   final double height;
   final double width;
@@ -24,6 +24,7 @@ class PersonalTextField extends StatelessWidget {
   final TextEditingController? controller;
   final Widget widget;
   final Color borderColore;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class PersonalTextField extends StatelessWidget {
         SizedBox(
           height: MediaQuery.of(context).size.height * .06,
           child: TextFormField(
+            validator: validator,
             textAlign: TextAlign.left,
             controller: controller,
             decoration: InputDecoration(

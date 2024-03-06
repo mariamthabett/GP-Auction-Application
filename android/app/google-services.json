@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "17676821943",
+    "firebase_url": "https://philo-task-default-rtdb.firebaseio.com",
     "project_id": "philo-task",
     "storage_bucket": "philo-task.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:17676821943:android:1c7d7c89f75571c483f432",
+        "mobilesdk_app_id": "1:17676821943:android:f63244d25e45056683f432",
         "android_client_info": {
           "package_name": "com.example.philo_task"
         }

@@ -70,10 +70,14 @@ dependencies:
   lottie: ^3.1.0
   image_picker: ^1.0.7
   permission_handler: ^11.3.0
-  firebase_auth: ^4.17.4
+  firebase_auth: ^4.17.7
   font_awesome_flutter: ^10.1.0
   country_code_picker: ^2.0.2
   intl_phone_number_input: ^0.7.0+2
+  firebase_core: ^2.26.0
+  cloud_firestore: ^4.15.7
+  firebase_messaging: ^14.7.18
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

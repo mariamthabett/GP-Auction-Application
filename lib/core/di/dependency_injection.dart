@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
+  //firebase firestore
+  getIt.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
   //Cache Helper
 //   getIt.registerLazySingleton<CacheHelper>(() => CacheHelper());
 //   // choose language cubit
