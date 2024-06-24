@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:philo_task/core/navigator/named_routes.dart';
 import 'package:philo_task/core/navigator/navigator.dart';
 import 'package:philo_task/models/product.dart';
@@ -44,7 +43,11 @@ class DatabaseHelper {
     List<ProductModel> products = [];
     try {
       await _firestore.collection('Products').get().then((querySnapshot) {
+        print(querySnapshot.docs);
         querySnapshot.docs.forEach((element) {
+          print(
+              '----------------------------------------------------------------');
+          print(element.data());
           products.add(ProductModel.fromJson(element.data()));
         });
       });

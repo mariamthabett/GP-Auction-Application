@@ -37,10 +37,10 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> map) {
     return ProductModel(
-      sId: map['sId'],
-      title: map['title'],
-      price: map['price'],
-      image: map['image'],
+      sId: map['sId'] ?? '',
+      title: map['title'] ?? '',
+      price: map['price'] ?? '',
+      image: map['image'] ?? '',
     );
   }
 }
