@@ -51,7 +51,7 @@ class DatabaseHelper {
       log('products Fetched ${products[0].title}');
       return products;
     } catch (e) {
-      log("asdasd" + e.toString());
+      log("Error while fetching products" + e.toString());
       return products;
     }
   }
