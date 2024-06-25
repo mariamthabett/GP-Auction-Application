@@ -1,15 +1,22 @@
 class ProductModel {
-  //id , price, title, image,
-  String? sId;
-  String? title;
-  String? price;
-  String? image;
+  final String? sId,
+      title,
+      price,
+      image,
+      categoryId,
+      productDescription,
+      Seller_Id,
+      shipmentId;
 
   ProductModel({
     this.sId,
     this.title,
     this.price,
     this.image,
+    this.categoryId,
+    this.productDescription,
+    this.Seller_Id,
+    this.shipmentId,
   });
 
   ProductModel copyWith({
@@ -41,6 +48,10 @@ class ProductModel {
       title: map['title'],
       price: map['price'],
       image: map['image'],
+      categoryId: map['Category_Id'],
+      productDescription: map['ProductDescription'],
+      Seller_Id: map['Seller_Id'],
+      shipmentId: map['shipmentt_Id'],
     );
   }
 }

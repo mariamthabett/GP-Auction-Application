@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
+import 'package:philo_task/models/product.dart';
 
 import 'presentation/screens/chat/GroupChatScreen.dart';
 
 class ProductInfo extends StatefulWidget {
-  // final String userID;
-  // final String userName;
   ProductInfo({Key? key});
   @override
   State<ProductInfo> createState() => _ProductInfoState();
@@ -18,28 +19,12 @@ class ProductInfo extends StatefulWidget {
 
 class _ProductInfoState extends State<ProductInfo> {
   bool isFavorite = false;
-  int quantity = 0;
-  double productRating = 3.5;
   bool isForSale = true; // Adjust the value based on your logic
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _fApp = Firebase.initializeApp();
-  // }
-  String ProductName = '';
-  String ProductDescription = '';
-  String ProductPhoto = '';
-  String Status = '';
-  String StartBidAmount = '0';
-  String Category_Id = '0';
-  String y = '';
-  // String Seller_Id = '0';
-  // String shipmentt_Id = '0';
   bool isBiddingStarted = false;
-  List<QueryDocumentSnapshot> docs = [];
   List<QueryDocumentSnapshot> sellers = [];
   late final String _userName;
+
+  late ProductModel product;
   _getUserName() async {
     final db = await FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance
@@ -49,7 +34,7 @@ class _ProductInfoState extends State<ProductInfo> {
         .then((ds) {
       if (ds.exists) {
         Map<String, dynamic>? data =
-            ds.data!(); // Call the function to get the data
+            ds.data(); // Call the function to get the data
         _userName = data!['userName'];
       } else {
         // Handle the case where the document doesn't exist
@@ -59,9 +44,6 @@ class _ProductInfoState extends State<ProductInfo> {
   }
 
   getData() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("product").get();
-    docs.addAll(querySnapshot.docs);
     QuerySnapshot querySnapshot2 =
         await FirebaseFirestore.instance.collection("seller").get();
     sellers.addAll(querySnapshot2.docs);
@@ -70,9 +52,10 @@ class _ProductInfoState extends State<ProductInfo> {
 
   @override
   void initState() {
-    getData();
     super.initState();
+
     _getUserName();
+    getData();
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         isBiddingStarted = true;
@@ -82,6 +65,7 @@ class _ProductInfoState extends State<ProductInfo> {
 
   @override
   Widget build(BuildContext context) {
+    product = ModalRoute.of(context)!.settings.arguments as ProductModel;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 115, 183, 239),
@@ -89,7 +73,7 @@ class _ProductInfoState extends State<ProductInfo> {
           onPressed: () {},
           icon: const Icon(Icons.arrow_circle_left_outlined),
         ),
-        title: Text("${docs[0]["ProductName"]}"),
+        title: Text(product.title!),
         centerTitle: true,
         actions: [
           IconButton(
@@ -117,13 +101,13 @@ class _ProductInfoState extends State<ProductInfo> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(40),
                   child: Container(
-                    width: 375,
-                    height: 300,
+                    width: 200,
+                    height: 250,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
                     child: Image.network(
-                      '${docs[0]["ProductPhoto"]}',
+                      product.image!,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -133,23 +117,29 @@ class _ProductInfoState extends State<ProductInfo> {
             const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${docs[0]["ProductName"]}",
-                        style: const TextStyle(
-                          fontSize: 28,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+              child: Text(
+                product.title!,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 28,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Card(
+              margin: const EdgeInsets.all(5),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Text(
+                  "Description: ${product.productDescription!}",
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
+                ),
               ),
             ),
             Card(
@@ -158,23 +148,7 @@ class _ProductInfoState extends State<ProductInfo> {
                 children: [
                   const SizedBox(width: 15),
                   Text(
-                    "Description: ${docs[0]["ProductDescription"]}",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Card(
-              margin: const EdgeInsets.all(5),
-              child: Row(
-                children: [
-                  const SizedBox(width: 15),
-                  Text(
-                    "Start Bid Amount: ${docs[0]["StartBidAmount"]} EGP",
+                    "Start Bid Amount: ${product.price!} EGP",
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -195,7 +169,7 @@ class _ProductInfoState extends State<ProductInfo> {
                 children: [
                   const SizedBox(width: 15),
                   for (var i = 0; i < sellers.length; i++)
-                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                    if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
                       Text(
                         "Company: ${sellers[i]['CompanyName']}",
                         style: const TextStyle(
@@ -214,7 +188,7 @@ class _ProductInfoState extends State<ProductInfo> {
                 children: [
                   const SizedBox(width: 15),
                   for (var i = 0; i < sellers.length; i++)
-                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                    if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
                       Text(
                         "Seller: ${sellers[i]['Name']}",
                         style: const TextStyle(
@@ -265,8 +239,8 @@ class _ProductInfoState extends State<ProductInfo> {
                 ? () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (BuildContext context) => GroupChatScreen(
-                              groupId: docs[0]['ProductID'],
-                              groupName: docs[0]['ProductName'],
+                              groupId: product.sId!,
+                              groupName: product.title!,
                               userName: _userName,
                             )));
                   }
