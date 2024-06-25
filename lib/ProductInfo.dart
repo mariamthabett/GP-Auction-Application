@@ -1,14 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
-import 'package:philo_task/models/product.dart';
 
+import 'models/product.dart';
 import 'presentation/screens/chat/GroupChatScreen.dart';
 
 class ProductInfo extends StatefulWidget {
@@ -101,8 +95,8 @@ class _ProductInfoState extends State<ProductInfo> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(40),
                   child: Container(
-                    width: 200,
-                    height: 250,
+                    width: 250,
+                    height: 300,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
@@ -205,19 +199,6 @@ class _ProductInfoState extends State<ProductInfo> {
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 253, 253, 253),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 247, 247, 248),
-        color: Color.fromARGB(255, 115, 183, 239),
-        animationDuration: const Duration(milliseconds: 300),
-        onTap: (index) {},
-        items: const [
-          Icon(Icons.home),
-          Icon(Icons.favorite),
-          //Icon(Icons.picture_in_picture),
-          Icon(Icons.shopping_cart),
-          Icon(Icons.person),
-        ],
-      ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -16,7 +16,7 @@ class DatabaseHelper {
     try {
       await _firestore.collection('Users').doc(user!.email).set(user.toJson());
       // log('User Created');
-      Go.toNamed(NamedRoutes.home);
+      Go.toNamed(NamedRoutes.navigationBar);
     } catch (e) {
       print(e);
     }

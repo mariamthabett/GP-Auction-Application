@@ -93,7 +93,7 @@ class _LoginViewState extends State<LoginView> {
                 List<String?> passwords = users.map((e) => e.password).toList();
                 if (emails.contains(emailController.text) &&
                     passwords.contains(passwordController.text)) {
-                  Go.offNamed(NamedRoutes.home);
+                  Go.offNamed(NamedRoutes.navigationBar);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

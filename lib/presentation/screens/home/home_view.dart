@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:philo_task/core/helpers/firebase_firestore_helper.dart';
 import 'package:philo_task/models/product.dart';
 import 'package:philo_task/presentation/widgets/custom_appbar.dart';
@@ -28,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initProducts();
     });
     super.initState();
@@ -36,7 +34,7 @@ class _HomeViewState extends State<HomeView> {
 
   _initProducts() async {
     allProducts = await DatabaseHelper.getProducts();
-    
+
     setState(() {});
   }
 
