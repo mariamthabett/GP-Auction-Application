@@ -1,27 +1,79 @@
 {
   "project_info": {
-    "project_number": "17676821943",
-    "firebase_url": "https://philo-task-default-rtdb.firebaseio.com",
-    "project_id": "philo-task",
-    "storage_bucket": "philo-task.appspot.com"
+    "project_number": "899897731776",
+    "project_id": "testing-26a69",
+    "storage_bucket": "testing-26a69.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:17676821943:android:f63244d25e45056683f432",
+        "mobilesdk_app_id": "1:899897731776:android:5724db5caab0c3eb4f9b25",
         "android_client_info": {
-          "package_name": "com.example.philo_task"
+          "package_name": "com.ecs.mazad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "899897731776-vg8gr8kl6lgs9t9s6o4jkth6jhmv5n0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDzEWCJABG3bZzm-x-0yjQjzyssgxsLfpw"
+          "current_key": "AIzaSyAenXrBugkrpbKDSWN8ylXIXkdMsLRTNsA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899897731776-vg8gr8kl6lgs9t9s6o4jkth6jhmv5n0t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "899897731776-8citturkm0ekhqbcas7662f4psmo4ho1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899897731776:android:cbf768825fc5dcd24f9b25",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899897731776-vg8gr8kl6lgs9t9s6o4jkth6jhmv5n0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAenXrBugkrpbKDSWN8ylXIXkdMsLRTNsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899897731776-vg8gr8kl6lgs9t9s6o4jkth6jhmv5n0t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "899897731776-8citturkm0ekhqbcas7662f4psmo4ho1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication2"
+              }
+            }
+          ]
         }
       }
     }

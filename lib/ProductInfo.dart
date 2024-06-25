@@ -1,13 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'RatingPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'presentation/screens/chat/GroupChatScreen.dart';
 
 class ProductInfo extends StatefulWidget {
-  const ProductInfo({Key? key}) : super(key: key);
-
+  // final String userID;
+  // final String userName;
+  ProductInfo({Key? key});
   @override
   State<ProductInfo> createState() => _ProductInfoState();
 }
@@ -29,36 +29,63 @@ class _ProductInfoState extends State<ProductInfo> {
   String Status = '';
   String StartBidAmount = '0';
   String Category_Id = '0';
+  String y = '';
   // String Seller_Id = '0';
   // String shipmentt_Id = '0';
-
+  bool isBiddingStarted = false;
   List<QueryDocumentSnapshot> docs = [];
-
-  getData () async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("product").get();
-    docs.addAll(querySnapshot.docs);
-    print(docs.length);
-    setState(() {
-      
+  List<QueryDocumentSnapshot> sellers = [];
+  String _userName = '';
+  _getUserName() async {
+    final db = await FirebaseAuth.instance.currentUser!;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(db.uid)
+        .get()
+        .then((ds) {
+      if (ds.exists) {
+        Map<String, dynamic>? data =
+            ds.data(); // Call the function to get the data
+        _userName = data!['userName'];
+      } else {
+        // Handle the case where the document doesn't exist
+        print('not exist');
+      }
     });
+  }
+
+  getData() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("product").get();
+    docs.addAll(querySnapshot.docs);
+    QuerySnapshot querySnapshot2 =
+        await FirebaseFirestore.instance.collection("seller").get();
+    sellers.addAll(querySnapshot2.docs);
+    setState(() {});
   }
 
   @override
   void initState() {
     getData();
     super.initState();
+    _getUserName();
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        isBiddingStarted = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 249, 212, 255),
+        backgroundColor: Color.fromARGB(255, 115, 183, 239),
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(Icons.arrow_circle_left_outlined),
         ),
-        title: Text("Product Details: ${docs[0]["ProductDescription"]}"),
+        title: Text("${docs[0]["ProductName"]}"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -75,7 +102,7 @@ class _ProductInfoState extends State<ProductInfo> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -100,26 +127,29 @@ class _ProductInfoState extends State<ProductInfo> {
               ],
             ),
             const SizedBox(height: 15),
-            Row(
-              children: [
-                SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${docs[0]["ProductName"]}",
-                      style: const TextStyle(
-                        fontSize: 28,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
             Padding(
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${docs[0]["ProductName"]}",
+                        style: const TextStyle(
+                          fontSize: 28,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Card(
+              margin: const EdgeInsets.all(5),
               child: Row(
                 children: [
                   const SizedBox(width: 15),
@@ -134,46 +164,13 @@ class _ProductInfoState extends State<ProductInfo> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(0),
+            Card(
+              margin: const EdgeInsets.all(5),
               child: Row(
                 children: [
                   const SizedBox(width: 15),
                   Text(
-                    "${docs[0]["StartBidAmount"]} EGP",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: 185),
-                  Container(
-                    width: 30,
-                    height: 30,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (quantity > 0) quantity--;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 227, 158, 238),
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    quantity.toString(),
+                    "Start Bid Amount: ${docs[0]["StartBidAmount"]} EGP",
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -181,110 +178,50 @@ class _ProductInfoState extends State<ProductInfo> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                     height: 30,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          quantity++;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 232, 130, 248),
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 7),
-            // Updated Row widget for rating
-            Row(
-              children: [
-                const SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Row(
-                          children: [
-                            // Displaying gold stars based on the rating
-                            for (var i = 0; i < productRating.floor(); i++)
-                              const Icon(
-                                Icons.star_rounded,
-                                color: Colors.amber,
-                              ),
-                            // Displaying the half star if applicable
-                            if (productRating % 1 != 0)
-                              const Icon(
-                                Icons.star_half_rounded,
-                                color: Colors.amber,
-                              ),
-                            // Displaying white stars for the remaining
-                            for (var i = 0; i < 5 - productRating.ceil(); i++)
-                              const Icon(
-                                Icons.star_outline_rounded,
-                                color: Colors.amber,
-                              ),
-                          ],
+            Card(
+              margin: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  for (var i = 0; i < sellers.length; i++)
+                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                      Text(
+                        "Company: ${sellers[i]['CompanyName']}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            textStyle: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        RatingPage(
-                                          averageRating: productRating,
-                                          userName: 'Farah',
-                                        )));
-                          },
-                          child: Text('${productRating}'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+                      ),
+                    ],
+                ],
               ),
-              itemCount: 10, // Replace this with your actual item count
-              itemBuilder: (context, index) {
-                return Container(
-                  color: Colors.blue,
-                  child: Center(
-                    child: Text(
-                      'Item $index',
-                      style: const TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ),
-                );
-              },
+            ),
+            Card(
+              margin: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  for (var i = 0; i < sellers.length; i++)
+                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                      Text(
+                        "Seller: ${sellers[i]['Name']}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                ],
+              ),
             ),
           ],
         ),
@@ -292,7 +229,7 @@ class _ProductInfoState extends State<ProductInfo> {
       backgroundColor: const Color.fromARGB(255, 253, 253, 253),
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: const Color.fromARGB(255, 247, 247, 248),
-        color: const Color.fromARGB(255, 249, 212, 255),
+        color: Color.fromARGB(255, 115, 183, 239),
         animationDuration: const Duration(milliseconds: 300),
         onTap: (index) {},
         items: const [
@@ -303,46 +240,48 @@ class _ProductInfoState extends State<ProductInfo> {
           Icon(Icons.person),
         ],
       ),
-      floatingActionButton: isForSale
-          ? FloatingActionButton.extended(
-              onPressed: () {
-                // Add your onPressed functionality here
-                print('Add to cart tapped!');
-              },
-              icon: const Icon(Icons.add_shopping_cart, color: Colors.black),
-              label: const Text(
-                'Add to Cart',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () {},
+            icon: const Icon(Icons.confirmation_num, color: Colors.black),
+            label: const Text(
+              'Book a Ticket',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
-              backgroundColor: const Color.fromARGB(255, 232, 130, 248),
-            )
-          : FloatingActionButton.extended(
-              onPressed: () {
-                // Add your onPressed functionality here for booking a ticket
-                print('Book a Ticket tapped!');
-              },
-              icon: const Icon(Icons.confirmation_num, color: Colors.black),
-              label: const Text(
-                'Book a Ticket',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              backgroundColor: const Color.fromARGB(255, 232, 130, 248),
             ),
+            backgroundColor: const Color.fromARGB(255, 33, 150, 243),
+          ),
+          const SizedBox(width: 10),
+          FloatingActionButton.extended(
+            onPressed: isBiddingStarted
+                ? () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (BuildContext context) => GroupChatScreen(
+                              groupId: docs[0]['ProductID'],
+                              groupName: docs[0]['ProductName'],
+                              userName: _userName ?? "",
+                            )));
+                  }
+                : null,
+            icon: Icon(Icons.chat, color: Colors.black),
+            label: Text(
+              'Bid LiveChat',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: isBiddingStarted
+                ? const Color.fromARGB(255, 33, 150, 243)
+                : Colors.grey,
+          ),
+        ],
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MaterialApp(
-    home: ProductInfo(),
-  ));
 }

@@ -42,19 +42,26 @@ class DatabaseHelper {
   static Future<List<ProductModel>> getProducts() async {
     List<ProductModel> products = [];
     try {
-      await _firestore.collection('Products').get().then((querySnapshot) {
-        print(querySnapshot.docs);
-        querySnapshot.docs.forEach((element) {
-          print(
-              '----------------------------------------------------------------');
-          print(element.data());
-          products.add(ProductModel.fromJson(element.data()));
-        });
+      QuerySnapshot querySnapshot = await _firestore.collection('Products').get();
+
+      // Log the number of documents retrieved
+      log('Number of documents: ${querySnapshot.docs.length}');
+
+      querySnapshot.docs.forEach((element) {
+        // Log each document data
+        log('Document data: ${element.data()}');
+        products.add(ProductModel.fromJson(element.data() as Map<String, dynamic>));
       });
-      log('products Fetched ${products[0].title}');
+
+      if (products.isNotEmpty) {
+        log('products Fetched: ${products[0].title}');
+      } else {
+        log('No products found');
+      }
+      
       return products;
     } catch (e) {
-      log("Error while fetching products" + e.toString());
+      log("Error while fetching products: $e");
       return products;
     }
   }

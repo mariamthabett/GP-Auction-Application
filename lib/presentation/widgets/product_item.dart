@@ -51,8 +51,6 @@ class ProductItem extends StatelessWidget {
                       colors: [
                         Color(0xFFcdacf9),
                         Color(0xFF4568dc),
-                        // Color(0xFF4568dc),
-                        //Color(0xFFb06ab3),
                       ]),
                 )),
             SizedBox(

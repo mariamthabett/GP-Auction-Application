@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:philo_task/ProductInfo.dart';
 import 'package:philo_task/presentation/screens/favourites/favourites_view.dart';
 import 'package:philo_task/presentation/screens/home/home_view.dart';
 import 'package:philo_task/presentation/screens/login_screen/login_view.dart';
@@ -29,8 +30,8 @@ class RouterGenerator {
       //favourites
       case NamedRoutes.favourites:
         return _pageRouter.build(FavouritesView(), settings: settings);
-
-      // return _pageRouter.build(TransactionHistoryView(), settings: settings);
+      case NamedRoutes.productDetails:
+        return _pageRouter.build(ProductInfo(), settings: settings);
     }
   }
 }
