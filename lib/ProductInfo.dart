@@ -9,9 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'presentation/screens/chat/GroupChatScreen.dart';
 
 class ProductInfo extends StatefulWidget {
-  final String userID;
-  final String userName;
-  ProductInfo({Key? key, required this.userID, required this.userName});
+  // final String userID;
+  // final String userName;
+  ProductInfo({Key? key});
   @override
   State<ProductInfo> createState() => _ProductInfoState();
 }

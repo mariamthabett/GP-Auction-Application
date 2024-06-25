@@ -157,8 +157,8 @@ class _NonRaisedHandUI extends State<NonRaisedHandUI> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductInfo(
-                        userID: '1',
-                        userName: widget.userName,
+                        // userID: '1',
+                        // userName: widget.userName,
                       )),
             );
           },

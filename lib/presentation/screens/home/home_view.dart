@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
 
   _initProducts() async {
     allProducts = await DatabaseHelper.getProducts();
-    // log('Products Fetched ${allProducts[0].title}');
+    
     setState(() {});
   }
 
