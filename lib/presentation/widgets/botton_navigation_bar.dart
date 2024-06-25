@@ -1,9 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/favourites/favourites_view.dart';
+import '../screens/features/Favorites/presentation/pages/favourites_view.dart';
 import '../screens/home/home_view.dart';
-
 
 class NavigationBarScreen extends StatefulWidget {
   const NavigationBarScreen({super.key});
@@ -20,7 +19,6 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   Widget build(BuildContext context) {
     List<Widget?> pages = [
       HomeView(),
-      FavouritesView(),
       FavouritesView(),
       FavouritesView(),
     ];
@@ -40,7 +38,6 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   }
 }
 
-
 Widget getBottomNavigationBar({
   required GlobalKey key,
   void Function(int)? onTap,
@@ -55,7 +52,6 @@ Widget getBottomNavigationBar({
     items: const [
       Icon(Icons.home),
       Icon(Icons.favorite),
-      Icon(Icons.shopping_cart),
       Icon(Icons.person),
     ],
     animationCurve: Curves.easeInOut,
