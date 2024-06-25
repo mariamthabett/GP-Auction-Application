@@ -50,11 +50,12 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAenXrBugkrpbKDSWN8ylXIXkdMsLRTNsA',
-    appId: '1:899897731776:android:cbf768825fc5dcd24f9b25',
-    messagingSenderId: '899897731776',
-    projectId: 'testing-26a69',
-    storageBucket: 'testing-26a69.appspot.com',
+    apiKey: 'AIzaSyDzEWCJABG3bZzm-x-0yjQjzyssgxsLfpw',
+    appId: '1:17676821943:android:de44dd221ee025fd83f432',
+    messagingSenderId: '17676821943',
+    projectId: 'philo-task',
+    databaseURL: 'https://philo-task-default-rtdb.firebaseio.com',
+    storageBucket: 'philo-task.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

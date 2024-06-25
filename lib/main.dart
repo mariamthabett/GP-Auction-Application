@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'app/app.dart';
 import 'firebase_options.dart';
 
-
 // The main function is the starting point for all our Flutter Apps
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.android
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }
