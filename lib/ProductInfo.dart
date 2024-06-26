@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class _ProductInfoState extends State<ProductInfo> {
   bool isForSale = true; // Adjust the value based on your logic
   bool isBiddingStarted = false;
   List<QueryDocumentSnapshot> sellers = [];
-  late final String _userName;
+   String _userName = '';
 
   late ProductModel product;
   _getUserName() async {
@@ -32,6 +34,7 @@ class _ProductInfoState extends State<ProductInfo> {
         Map<String, dynamic>? data =
             ds.data(); // Call the function to get the data
         _userName = data!['userName'];
+        log(_userName);
       } else {
         // Handle the case where the document doesn't exist
         print('not exist');
@@ -162,14 +165,13 @@ class _ProductInfoState extends State<ProductInfo> {
                   ),
                 ),
               ),
-            ),
             Card(
               margin: const EdgeInsets.all(5),
               child: Row(
                 children: [
                   const SizedBox(width: 15),
                   Text(
-                    "Start Bid Amount: ${docs[0]["StartBidAmount"]} EGP",
+                      "Start Bid Amount: ${product.price!} EGP",
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -190,7 +192,7 @@ class _ProductInfoState extends State<ProductInfo> {
                 children: [
                   const SizedBox(width: 15),
                   for (var i = 0; i < sellers.length; i++)
-                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                      if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
                       Text(
                         "Company: ${sellers[i]['CompanyName']}",
                         style: const TextStyle(
@@ -209,7 +211,7 @@ class _ProductInfoState extends State<ProductInfo> {
                 children: [
                   const SizedBox(width: 15),
                   for (var i = 0; i < sellers.length; i++)
-                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                      if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
                       Text(
                         "Seller: ${sellers[i]['Name']}",
                         style: const TextStyle(
@@ -226,19 +228,6 @@ class _ProductInfoState extends State<ProductInfo> {
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 253, 253, 253),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 247, 247, 248),
-        color: Color.fromARGB(255, 115, 183, 239),
-        animationDuration: const Duration(milliseconds: 300),
-        onTap: (index) {},
-        items: const [
-          Icon(Icons.home),
-          Icon(Icons.favorite),
-          //Icon(Icons.picture_in_picture),
-          Icon(Icons.shopping_cart),
-          Icon(Icons.person),
-        ],
-      ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -260,8 +249,8 @@ class _ProductInfoState extends State<ProductInfo> {
                 ? () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (BuildContext context) => GroupChatScreen(
-                              groupId: docs[0]['ProductID'],
-                              groupName: docs[0]['ProductName'],
+                              groupId: product.sId!,
+                              groupName: product.title!,
                               userName: _userName ?? "",
                             )));
                   }
@@ -281,6 +270,7 @@ class _ProductInfoState extends State<ProductInfo> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
     );
   }
 }

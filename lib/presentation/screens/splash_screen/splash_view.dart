@@ -69,7 +69,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _goToLoginScreen() {
-    Go.toNamed(NamedRoutes.productDetails);
+    Go.toNamed(NamedRoutes.login);
   }
 
   Widget _buildTitle() {

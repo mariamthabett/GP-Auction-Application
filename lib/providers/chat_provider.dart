@@ -5,8 +5,8 @@ import 'package:flutter/scheduler.dart';
 import '../models/user_model.dart';
 
 class ChatProvider extends ChangeNotifier {
-  int remainingTime = 180; // Initial countdown time in seconds
-  final int chatTime = 180;
+  int remainingTime = 30; // Initial countdown time in seconds
+  final int chatTime = 30;
   Map<String, dynamic> messageData = {};
   late Ticker _ticker;
   UserModel userModel = UserModel();

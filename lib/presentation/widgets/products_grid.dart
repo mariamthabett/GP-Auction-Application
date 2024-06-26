@@ -5,7 +5,8 @@ import 'package:philo_task/presentation/widgets/product_item.dart';
 class ProductsGrid extends StatelessWidget {
   const ProductsGrid({
     super.key,
-    required this.products, required this.inFavScreen,
+    required this.products,
+    required this.inFavScreen,
   });
 
   final List<ProductModel> products;
