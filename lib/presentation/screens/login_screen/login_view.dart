@@ -4,9 +4,11 @@ import 'package:philo_task/core/helpers/firebase_firestore_helper.dart';
 import 'package:philo_task/core/navigator/named_routes.dart';
 import 'package:philo_task/core/navigator/navigator.dart';
 import 'package:philo_task/presentation/widgets/custom_textfield_personal.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/res/color_manger.dart';
 import '../../../models/user_model.dart';
+import '../../../providers/chat_provider.dart';
 import '../../widgets/bottom_text_button.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_button.dart';

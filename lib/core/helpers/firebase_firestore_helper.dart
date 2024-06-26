@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:philo_task/core/navigator/named_routes.dart';
 import 'package:philo_task/core/navigator/navigator.dart';
 import 'package:philo_task/models/product.dart';

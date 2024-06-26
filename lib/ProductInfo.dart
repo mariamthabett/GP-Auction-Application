@@ -162,112 +162,125 @@ class _ProductInfoState extends State<ProductInfo> {
                   ),
                 ),
               ),
-              Card(
-                margin: const EdgeInsets.all(5),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    Text(
-                      "Start Bid Amount: ${product.price!} EGP",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const SizedBox(
-                      width: 30,
-                      height: 30,
-                    ),
-                  ],
-                ),
-              ),
-              Card(
-                margin: const EdgeInsets.all(5),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    for (var i = 0; i < sellers.length; i++)
-                      if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
-                        Text(
-                          "Company: ${sellers[i]['CompanyName']}",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                  ],
-                ),
-              ),
-              Card(
-                margin: const EdgeInsets.all(5),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    for (var i = 0; i < sellers.length; i++)
-                      if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
-                        Text(
-                          "Seller: ${sellers[i]['Name']}",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 253, 253, 253),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton.extended(
-              onPressed: () {},
-              icon: const Icon(Icons.confirmation_num, color: Colors.black),
-              label: const Text(
-                'Book a Ticket',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              backgroundColor: const Color.fromARGB(255, 33, 150, 243),
             ),
-            const SizedBox(width: 10),
-            FloatingActionButton.extended(
-              onPressed: isBiddingStarted
-                  ? () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => GroupChatScreen(
-                                groupId: product.sId!,
-                                groupName: product.title!,
-                                userName: _userName,
-                              )));
-                    }
-                  : null,
-              icon: Icon(Icons.chat, color: Colors.black),
-              label: Text(
-                'Bid LiveChat',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+            Card(
+              margin: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  Text(
+                    "Start Bid Amount: ${docs[0]["StartBidAmount"]} EGP",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const SizedBox(
+                    width: 30,
+                    height: 30,
+                  ),
+                ],
               ),
-              backgroundColor: isBiddingStarted
-                  ? const Color.fromARGB(255, 33, 150, 243)
-                  : Colors.grey,
+            ),
+            Card(
+              margin: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  for (var i = 0; i < sellers.length; i++)
+                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                      Text(
+                        "Company: ${sellers[i]['CompanyName']}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                ],
+              ),
+            ),
+            Card(
+              margin: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  const SizedBox(width: 15),
+                  for (var i = 0; i < sellers.length; i++)
+                    if (sellers[i]['SellerID'] == docs[0]['Seller_Id']) ...[
+                      Text(
+                        "Seller: ${sellers[i]['Name']}",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                ],
+              ),
             ),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
+      backgroundColor: const Color.fromARGB(255, 253, 253, 253),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 247, 247, 248),
+        color: Color.fromARGB(255, 115, 183, 239),
+        animationDuration: const Duration(milliseconds: 300),
+        onTap: (index) {},
+        items: const [
+          Icon(Icons.home),
+          Icon(Icons.favorite),
+          //Icon(Icons.picture_in_picture),
+          Icon(Icons.shopping_cart),
+          Icon(Icons.person),
+        ],
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () {},
+            icon: const Icon(Icons.confirmation_num, color: Colors.black),
+            label: const Text(
+              'Book a Ticket',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: const Color.fromARGB(255, 33, 150, 243),
+          ),
+          const SizedBox(width: 10),
+          FloatingActionButton.extended(
+            onPressed: isBiddingStarted
+                ? () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (BuildContext context) => GroupChatScreen(
+                              groupId: docs[0]['ProductID'],
+                              groupName: docs[0]['ProductName'],
+                              userName: _userName ?? "",
+                            )));
+                  }
+                : null,
+            icon: Icon(Icons.chat, color: Colors.black),
+            label: Text(
+              'Bid LiveChat',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: isBiddingStarted
+                ? const Color.fromARGB(255, 33, 150, 243)
+                : Colors.grey,
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

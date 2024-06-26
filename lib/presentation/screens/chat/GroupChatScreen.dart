@@ -1,8 +1,14 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:philo_task/presentation/screens/chat/checkout_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../../ProductInfo.dart';
+import '../../../providers/chat_provider.dart';
 
 class GroupChatScreen extends StatelessWidget {
   final String groupId;
@@ -146,6 +152,7 @@ class _NonRaisedHandUI extends State<NonRaisedHandUI> {
     });
   }
 
+  bool raisedHandLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,8 +164,8 @@ class _NonRaisedHandUI extends State<NonRaisedHandUI> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductInfo(
-                        // userID: '1',
-                        // userName: widget.userName,
+                      // userID: '1',
+                      // userName: widget.userName,
                       )),
             );
           },
@@ -178,7 +185,7 @@ class _NonRaisedHandUI extends State<NonRaisedHandUI> {
                 .collection('groups')
                 .doc(widget.groupId)
                 .collection('hand_raising_requests')
-                .where('status', isEqualTo: 'raised')
+                .where('status', isEqualTo: 'accepted')
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
@@ -200,19 +207,40 @@ class _NonRaisedHandUI extends State<NonRaisedHandUI> {
                   ElevatedButton(
                     onPressed: hasRaisedHand
                         ? () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RaisedHandUI(
-                                  groupId: widget.groupId,
-                                  groupName: widget.groupName,
-                                  userName: widget.userName,
+                            setState(() {
+                              raisedHandLoading = true;
+                            });
+                            Future.delayed(Duration(seconds: 10), () {
+                              setState(() {
+                                raisedHandLoading = false;
+                              });
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RaisedHandUI(
+                                    groupId: widget.groupId,
+                                    groupName: widget.groupName,
+                                    userName: widget.userName,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            });
                           }
                         : null,
-                    child: Text('Raise Hand'),
+                    child: raisedHandLoading
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Please wait...'),
+                              SizedBox(width: 10),
+                              SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          )
+                        : Text('Raise Hand'),
                   ),
                 ],
               );
@@ -277,10 +305,11 @@ class BlockedUI extends StatelessWidget {
   }
 }
 
-class MessageList extends StatelessWidget {
+class MessageList extends StatefulWidget {
   final String groupId;
   final String userName;
   final String groupName;
+
   MessageList({
     required this.groupId,
     required this.userName,
@@ -288,70 +317,150 @@ class MessageList extends StatelessWidget {
   });
 
   @override
+  State<MessageList> createState() => _MessageListState();
+}
+
+final countDownController = CountDownController();
+
+class _MessageListState extends State<MessageList> {
+  double highestPrice = 0.0;
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('groups')
-          .doc(groupId)
-          .collection('messages')
-          .orderBy('timestamp', descending: true)
-          .snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-        return ListView(
-          reverse: true,
-          padding: EdgeInsets.all(8.0),
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 4.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    child: Icon(
-                        Icons.person), // Display first character of username
+    return Consumer<ChatProvider>(
+      builder: (context, timerProvider, child) {
+        return StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('groups')
+              .doc(widget.groupId)
+              .collection('messages')
+              .orderBy('timestamp', descending: true)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            if (!snapshot.hasData) {
+              return Center(
+                child: Text('No message yet'),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            return Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularCountDownTimer(
+                      width: 150,
+                      height: 50,
+                      duration: timerProvider.remainingTime,
+                      textFormat: CountdownTextFormat.S,
+                      fillColor: Theme.of(context).colorScheme.primary,
+                      ringColor: Theme.of(context).colorScheme.onPrimary,
+                      isReverse: true,
+                      isReverseAnimation: true,
+                      onComplete: () async {
+                        if (timerProvider.remainingTime == 0) {
+                          Fluttertoast.showToast(
+                            msg: "Mazad Ended",
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.green,
+                            fontSize: 22,
+                          );
+
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return CheckoutScreen(
+                              groupId: widget.groupId,
+                            );
+                          }));
+                        }
+                      },
+                      onStart: () {
+                        if (timerProvider.remainingTime ==
+                            timerProvider.chatTime) {
+                          Fluttertoast.showToast(
+                            msg: "Mazad Started",
+                            fontSize: 22,
+                            gravity: ToastGravity.CENTER,
+                            backgroundColor: Colors.black,
+                          );
+                        }
+                      },
+                      onChange: (value) {
+                        if (int.parse(value) != timerProvider.remainingTime) {
+                          timerProvider.changeTimer(int.parse(value));
+                        }
+                      },
+                    ),
                   ),
-                  SizedBox(width: 8.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data['senderId'], // Sender name
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                ListView(
+                  reverse: true,
+                  padding: EdgeInsets.all(8.0),
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            child: Icon(Icons
+                                .person), // Display first character of username
+                          ),
+                          SizedBox(width: 8.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data['senderId'], // Sender name
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 4.0),
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data['message'], // Message content
+                                    ),
+                                    SizedBox(height: 4.0),
+                                    Text(
+                                      '${data['timestamp'].toDate().toString()}', // Time and Date
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 4.0),
-                      Container(
-                        padding: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data['message'], // Message content
-                            ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              '${data['timestamp'].toDate().toString()}', // Time and Date
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    );
+                  }).toList(),
+                ),
+              ],
             );
-          }).toList(),
+          },
         );
       },
     );
@@ -382,7 +491,7 @@ class _RaisedHandMessageInput extends State<RaisedHandMessageInput> {
   int _lastMaxNumber = 0; // Track the maximum number sent in the chat
 
   void _raiseHand() {
-    if (!_isRequestPending) {
+    if (true) {
       setState(() {
         _isRequestPending = true;
       });
@@ -395,6 +504,7 @@ class _RaisedHandMessageInput extends State<RaisedHandMessageInput> {
         'userId': widget.userName,
         'status': 'pending',
       }).then((docRef) {
+        print(widget.groupId);
         FirebaseFirestore.instance
             .collection('groups')
             .doc(widget.groupId)
@@ -415,14 +525,14 @@ class _RaisedHandMessageInput extends State<RaisedHandMessageInput> {
         .collection('messages')
         .get();
 
-    for (final doc in snapshot.docs) {
-      final data = doc.data() as Map<String, dynamic>;
-      final messageText = data['message'];
-      if (int.tryParse(messageText) != null) {
-        final intMessage = int.parse(messageText);
-        if (intMessage >= message) {
-          return false; // Found a message greater than or equal to the new number
-        }
+    for (var doc in snapshot.docs) {
+      var data = doc.data();
+      context.read<ChatProvider>().setLastMessage(data);
+      var messageText = data['message'];
+
+      final intMessage = int.parse(messageText);
+      if (intMessage >= message) {
+        return false; // Found a message greater than or equal to the new number
       }
     }
     return true; // No message found greater than or equal to the new number
@@ -521,27 +631,21 @@ class NonRaisedHandMessageInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                // Raise hand functionality
-                FirebaseFirestore.instance
-                    .collection('groups')
-                    .doc(groupId)
-                    .collection('hand_raising_requests')
-                    .add({
-                  'userId': userName,
-                  'status': 'raised', // Mark the status as raised
-                }).catchError((error) {
-                  print('Error raising hand: $error');
-                });
-              },
-              child: Text('Raise Hand'),
-            ),
-          ),
-        ],
+      child: ElevatedButton(
+        onPressed: () {
+          // Raise hand functionality
+          FirebaseFirestore.instance
+              .collection('groups')
+              .doc(groupId)
+              .collection('hand_raising_requests')
+              .add({
+            'userId': userName,
+            'status': 'raised', // Mark the status as raised
+          }).catchError((error) {
+            print('Error raising hand: $error');
+          });
+        },
+        child: Text('Raise Hand'),
       ),
     );
   }

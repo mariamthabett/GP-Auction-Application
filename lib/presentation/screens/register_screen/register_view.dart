@@ -5,6 +5,8 @@ import 'package:philo_task/core/navigator/named_routes.dart';
 import 'package:philo_task/core/navigator/navigator.dart';
 import 'package:philo_task/core/res/color_manger.dart';
 import 'package:philo_task/models/user_model.dart';
+import 'package:philo_task/providers/chat_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/bottom_text_button.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -154,6 +156,14 @@ class _RegisterViewState extends State<RegisterView> {
                       name: usernameController.text,
                     ),
                   );
+                  // Provider.of<ChatProvider>(context, listen: false).userModel =
+                  //     UserModel(
+                  //   id: '1',
+                  //   email: emailController.text,
+                  //   password: passwordController.text,
+                  //   confirmPassword: confirmPasswordController.text,
+                  //   name: usernameController.text,
+                  // );
                 }
               }),
           SizedBox(
