@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 class ProductModel {
   final String? sId,
       title,
@@ -44,14 +46,14 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> map) {
     return ProductModel(
-      sId: map['sId'],
-      title: map['title'],
-      price: map['price'],
-      image: map['image'],
-      categoryId: map['Category_Id'],
-      productDescription: map['ProductDescription'],
-      Seller_Id: map['Seller_Id'],
-      shipmentId: map['shipmentt_Id'],
+      sId: Uuid().v4(),
+      title: map['title'] ?? '',
+      price: map['price'] ?? '',
+      image: map['image'] ?? '',
+      categoryId: map['Category_Id'] ?? '',
+      productDescription: map['ProductDescription'] ?? '',
+      Seller_Id: map['Seller_Id'] ?? '',
+      shipmentId: map['shipmentt_Id'] ?? '',
     );
   }
 }
