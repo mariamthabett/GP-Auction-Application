@@ -116,6 +116,7 @@ class _RegisterViewState extends State<RegisterView> {
                 fontFamily: 'Familiar Pro',
               ),
             ),
+            obscureText: true,
           ),
           16.verticalSpace,
           PersonalTextField(
@@ -137,6 +138,7 @@ class _RegisterViewState extends State<RegisterView> {
                 fontFamily: 'Familiar Pro',
               ),
             ),
+            obscureText: true,
             suffixIcon: Icon(
               Icons.visibility,
               color: ColorManager.myBlack,
