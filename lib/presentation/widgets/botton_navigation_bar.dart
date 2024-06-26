@@ -32,8 +32,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
             });
           }),
       extendBody: true,
-      body: Container(
-          padding: const EdgeInsets.only(bottom: 50), child: pages[_page]),
+      body: Container(child: pages[_page]),
     );
   }
 }

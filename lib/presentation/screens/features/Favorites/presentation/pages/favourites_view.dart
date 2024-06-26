@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:philo_task/presentation/screens/features/Favorites/presentation/bloc/favorites_bloc.dart';
 
+import '../../../../../widgets/products_grid.dart';
 import '../widgets/new_app_bar.dart';
 
 class FavouritesView extends StatefulWidget {
@@ -23,19 +24,31 @@ class _FavouritesViewState extends State<FavouritesView> {
     return Scaffold(
       appBar: NewAppBar(title: 'Favorites'),
       body: BlocConsumer<FavoritesBloc, FavoritesState>(
-        listener: (context, state) {},
+        listenWhen: (previous, current) =>
+            previous.deleteProductState != current.deleteProductState,
+        listener: (context, state) {
+          if (state.deleteProductState == RequestState.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.deleteProductMessage),
+              ),
+            );
+          } else if (state.deleteProductState == RequestState.error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.deleteProductMessage),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           switch (state.getProductsState) {
             case RequestState.loading:
               return const Center(child: CircularProgressIndicator());
             case RequestState.success:
-              return ListView.builder(
-                itemCount: state.products.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: Text(state.products[index].title!),
-                  );
-                },
+              return ProductsGrid(
+                inFavScreen: true,
+                products: state.products,
               );
             case RequestState.error:
               return Center(child: Text(' You have no favorites yet'));

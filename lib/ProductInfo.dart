@@ -63,6 +63,8 @@ class _ProductInfoState extends State<ProductInfo> {
   Widget build(BuildContext context) {
     product = ModalRoute.of(context)!.settings.arguments as ProductModel;
     return BlocListener<FavoritesBloc, FavoritesState>(
+      listenWhen: (previous, current) =>
+          previous.addProductState != current.addProductState,
       listener: (context, state) {
         switch (state.addProductState) {
           case RequestState.success:
@@ -86,7 +88,7 @@ class _ProductInfoState extends State<ProductInfo> {
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 115, 183, 239),
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_circle_left_outlined),
           ),
           title: Text(product.title!),
