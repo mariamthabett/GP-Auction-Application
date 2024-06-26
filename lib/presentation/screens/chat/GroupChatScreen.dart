@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:philo_task/presentation/screens/chat/checkout_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../ProductInfo.dart';
@@ -308,6 +309,7 @@ class MessageList extends StatefulWidget {
   final String groupId;
   final String userName;
   final String groupName;
+
   MessageList({
     required this.groupId,
     required this.userName,
@@ -321,6 +323,8 @@ class MessageList extends StatefulWidget {
 final countDownController = CountDownController();
 
 class _MessageListState extends State<MessageList> {
+  double highestPrice = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatProvider>(
@@ -350,6 +354,7 @@ class _MessageListState extends State<MessageList> {
                 ),
               );
             }
+
             return Stack(
               children: [
                 Align(
@@ -357,8 +362,8 @@ class _MessageListState extends State<MessageList> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CircularCountDownTimer(
-                      width: 150.w,
-                      height: 50.h,
+                      width: 150,
+                      height: 50,
                       duration: timerProvider.remainingTime,
                       textFormat: CountdownTextFormat.S,
                       fillColor: Theme.of(context).colorScheme.primary,
@@ -367,18 +372,19 @@ class _MessageListState extends State<MessageList> {
                       isReverseAnimation: true,
                       onComplete: () async {
                         if (timerProvider.remainingTime == 0) {
-                          await timerProvider.clearChat(widget.groupId);
-                          await timerProvider
-                              .resetHandRaiseStatus(widget.groupId);
-                          Navigator.pop(context);
                           Fluttertoast.showToast(
                             msg: "Mazad Ended",
                             gravity: ToastGravity.CENTER,
                             backgroundColor: Colors.green,
                             fontSize: 22,
-                          ).whenComplete(() {
-                            timerProvider.changeTimer(timerProvider.chatTime);
-                          });
+                          );
+
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return CheckoutScreen(
+                              groupId: widget.groupId,
+                            );
+                          }));
                         }
                       },
                       onStart: () {
@@ -521,6 +527,7 @@ class _RaisedHandMessageInput extends State<RaisedHandMessageInput> {
 
     for (var doc in snapshot.docs) {
       var data = doc.data();
+      context.read<ChatProvider>().setLastMessage(data);
       var messageText = data['message'];
 
       final intMessage = int.parse(messageText);

@@ -39,14 +39,14 @@ class _ProductInfoState extends State<ProductInfo> {
   _getUserName() async {
     final db = await FirebaseAuth.instance.currentUser!;
     await FirebaseFirestore.instance
-        .collection('users')
+        .collection('Users')
         .doc(db.uid)
         .get()
         .then((ds) {
       if (ds.exists) {
         Map<String, dynamic>? data =
             ds.data(); // Call the function to get the data
-        _userName = data!['userName'];
+        _userName = data!['name'];
       } else {
         // Handle the case where the document doesn't exist
         print('not exist');

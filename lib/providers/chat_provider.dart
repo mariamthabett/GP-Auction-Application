@@ -2,10 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../models/user_model.dart';
+
 class ChatProvider extends ChangeNotifier {
-  int remainingTime = 30; // Initial countdown time in seconds
-  final int chatTime = 30;
+  int remainingTime = 180; // Initial countdown time in seconds
+  final int chatTime = 180;
+  Map<String, dynamic> messageData = {};
   late Ticker _ticker;
+  UserModel userModel = UserModel();
+
+  void setLastMessage(Map<String, dynamic> data) {
+    messageData = data;
+    notifyListeners();
+  }
 
   ChatProvider() {
     _ticker = Ticker(_tick);
