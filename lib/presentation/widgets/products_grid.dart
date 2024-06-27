@@ -11,7 +11,6 @@ class ProductsGrid extends StatelessWidget {
 
   final List<ProductModel> products;
   final bool inFavScreen;
-
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
