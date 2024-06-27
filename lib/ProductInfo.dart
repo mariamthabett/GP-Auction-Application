@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:philo_task/providers/chat_provider.dart';
 
 import 'models/product.dart';
 import 'presentation/screens/chat/GroupChatScreen.dart';
@@ -20,7 +21,7 @@ class _ProductInfoState extends State<ProductInfo> {
   bool isForSale = true; // Adjust the value based on your logic
   bool isBiddingStarted = false;
   List<QueryDocumentSnapshot> sellers = [];
-   String _userName = '';
+  String _userName = '';
 
   late ProductModel product;
   _getUserName() async {
@@ -64,6 +65,7 @@ class _ProductInfoState extends State<ProductInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final chatProvider = context.watch<ChatProvider>();
     product = ModalRoute.of(context)!.settings.arguments as ProductModel;
     return BlocListener<FavoritesBloc, FavoritesState>(
       listenWhen: (previous, current) =>
@@ -165,111 +167,111 @@ class _ProductInfoState extends State<ProductInfo> {
                   ),
                 ),
               ),
-            Card(
-              margin: const EdgeInsets.all(5),
-              child: Row(
-                children: [
-                  const SizedBox(width: 15),
-                  Text(
+              Card(
+                margin: const EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 15),
+                    Text(
                       "Start Bid Amount: ${product.price!} EGP",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  const SizedBox(
-                    width: 30,
-                    height: 30,
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    const SizedBox(
+                      width: 30,
+                      height: 30,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Card(
-              margin: const EdgeInsets.all(5),
-              child: Row(
-                children: [
-                  const SizedBox(width: 15),
-                  for (var i = 0; i < sellers.length; i++)
+              Card(
+                margin: const EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 15),
+                    for (var i = 0; i < sellers.length; i++)
                       if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
-                      Text(
-                        "Company: ${sellers[i]['CompanyName']}",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          "Company: ${sellers[i]['CompanyName']}",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                ],
+                      ],
+                  ],
+                ),
               ),
-            ),
-            Card(
-              margin: const EdgeInsets.all(5),
-              child: Row(
-                children: [
-                  const SizedBox(width: 15),
-                  for (var i = 0; i < sellers.length; i++)
+              Card(
+                margin: const EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 15),
+                    for (var i = 0; i < sellers.length; i++)
                       if (sellers[i]['SellerID'] == product.Seller_Id!) ...[
-                      Text(
-                        "Seller: ${sellers[i]['Name']}",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          "Seller: ${sellers[i]['Name']}",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                ],
+                      ],
+                  ],
+                ),
               ),
+            ],
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 253, 253, 253),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton.extended(
+              onPressed: () {},
+              icon: const Icon(Icons.confirmation_num, color: Colors.black),
+              label: const Text(
+                'Book a Ticket',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              backgroundColor: const Color.fromARGB(255, 33, 150, 243),
+            ),
+            const SizedBox(width: 10),
+            FloatingActionButton.extended(
+              onPressed: isBiddingStarted
+                  ? () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) => GroupChatScreen(
+                                groupId: product.sId!,
+                                groupName: product.title!,
+                                userName: chatProvider.userModel.name!,
+                              )));
+                    }
+                  : null,
+              icon: Icon(Icons.chat, color: Colors.black),
+              label: Text(
+                'Bid LiveChat',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              backgroundColor: isBiddingStarted
+                  ? const Color.fromARGB(255, 33, 150, 243)
+                  : Colors.grey,
             ),
           ],
         ),
-      ),
-      backgroundColor: const Color.fromARGB(255, 253, 253, 253),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton.extended(
-            onPressed: () {},
-            icon: const Icon(Icons.confirmation_num, color: Colors.black),
-            label: const Text(
-              'Book a Ticket',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            backgroundColor: const Color.fromARGB(255, 33, 150, 243),
-          ),
-          const SizedBox(width: 10),
-          FloatingActionButton.extended(
-            onPressed: isBiddingStarted
-                ? () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => GroupChatScreen(
-                              groupId: product.sId!,
-                              groupName: product.title!,
-                              userName: _userName ?? "",
-                            )));
-                  }
-                : null,
-            icon: Icon(Icons.chat, color: Colors.black),
-            label: Text(
-              'Bid LiveChat',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            backgroundColor: isBiddingStarted
-                ? const Color.fromARGB(255, 33, 150, 243)
-                : Colors.grey,
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:philo_task/core/res/color_manger.dart';
 import 'package:philo_task/models/user_model.dart';
 import 'package:philo_task/providers/chat_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../widgets/bottom_text_button.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -151,21 +152,21 @@ class _RegisterViewState extends State<RegisterView> {
                 if (_formKey.currentState!.validate()) {
                   DatabaseHelper.createUser(
                     UserModel(
-                      id: '1',
+                      id: Uuid().v4(),
                       email: emailController.text,
                       password: passwordController.text,
                       confirmPassword: confirmPasswordController.text,
                       name: usernameController.text,
                     ),
                   );
-                  // Provider.of<ChatProvider>(context, listen: false).userModel =
-                  //     UserModel(
-                  //   id: '1',
-                  //   email: emailController.text,
-                  //   password: passwordController.text,
-                  //   confirmPassword: confirmPasswordController.text,
-                  //   name: usernameController.text,
-                  // );
+                  Provider.of<ChatProvider>(context, listen: false).userModel =
+                      UserModel(
+                    id: Uuid().v4(),
+                    email: emailController.text,
+                    password: passwordController.text,
+                    confirmPassword: confirmPasswordController.text,
+                    name: usernameController.text,
+                  );
                 }
               }),
           SizedBox(
