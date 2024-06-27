@@ -1,8 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:philo_task/presentation/screens/profile/screens/profile_screen.dart';
 
-import '../screens/Favorites/presentation/pages/favourites_view.dart';
+import '../screens/features/Favorites/presentation/pages/favourites_view.dart';
 import '../screens/home/home_view.dart';
 
 class NavigationBarScreen extends StatefulWidget {
@@ -21,7 +20,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
     List<Widget?> pages = [
       HomeView(),
       FavouritesView(),
-      ProfileScreen(),
+      FavouritesView(),
     ];
     return Scaffold(
       bottomNavigationBar: getBottomNavigationBar(

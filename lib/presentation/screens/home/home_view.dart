@@ -41,6 +41,11 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
+          actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () { }
+          )],
           onChanged: (p0) {
             setState(() {
               searchedProducts = allProducts
