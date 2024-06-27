@@ -90,11 +90,17 @@ class _LoginViewState extends State<LoginView> {
             onTap: () async {
               // Go.offNamed(NamedRoues.home);
               if (_formKey.currentState!.validate()) {
+                final chatProvider =
+                    Provider.of<ChatProvider>(context, listen: false);
                 List<UserModel> users = await DatabaseHelper.getUsers();
                 List<String?> emails = users.map((e) => e.email).toList();
                 List<String?> passwords = users.map((e) => e.password).toList();
                 if (emails.contains(emailController.text) &&
                     passwords.contains(passwordController.text)) {
+                  chatProvider.userModel = users.firstWhere((user) =>
+                      user.email == emailController.text &&
+                      user.password == passwordController.text);
+                  print(chatProvider.userModel.email);
                   Go.offNamed(NamedRoutes.navigationBar);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
