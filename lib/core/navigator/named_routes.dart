@@ -6,6 +6,7 @@ enum NamedRoutes {
   home('/home'),
   favourites('/favourites'),
   navigationBar('/navigation-bar'),
+  profile('/profile'),
   ;
 
   final String routeName;

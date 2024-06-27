@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:philo_task/ProductInfo.dart';
-import 'package:philo_task/presentation/screens/features/Favorites/presentation/pages/favourites_view.dart';
+import 'package:philo_task/presentation/screens/Favorites/presentation/pages/favourites_view.dart';
 import 'package:philo_task/presentation/screens/home/home_view.dart';
 import 'package:philo_task/presentation/screens/login_screen/login_view.dart';
+import 'package:philo_task/presentation/screens/profile/screens/profile_screen.dart';
 import 'package:philo_task/presentation/screens/register_screen/register_view.dart';
 import 'package:philo_task/presentation/screens/splash_screen/splash_view.dart';
 import 'package:philo_task/presentation/widgets/botton_navigation_bar.dart';
@@ -35,6 +36,8 @@ class RouterGenerator {
         return _pageRouter.build(ProductInfo(), settings: settings);
       case NamedRoutes.navigationBar:
         return _pageRouter.build(NavigationBarScreen(), settings: settings);
+      case NamedRoutes.profile:
+        return _pageRouter.build(ProfileScreen(), settings: settings);
     }
   }
 }

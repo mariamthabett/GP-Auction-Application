@@ -5,7 +5,7 @@ import 'package:philo_task/core/theming/colors.dart';
 import 'package:philo_task/presentation/widgets/custom_textfield.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key, this.controller, this.onChanged, required List<Widget> actions});
+  const CustomAppBar({super.key, this.controller, this.onChanged});
 
   final TextEditingController? controller;
   final Function(String)? onChanged;
