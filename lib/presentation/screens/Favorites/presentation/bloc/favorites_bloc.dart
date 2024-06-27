@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../../../models/product.dart';
+import '../../../../../models/product.dart';
 
 part 'favorites_event.dart';
 part 'favorites_state.dart';

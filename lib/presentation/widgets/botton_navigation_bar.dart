@@ -1,7 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/features/Favorites/presentation/pages/favourites_view.dart';
+import '../screens/Favorites/presentation/pages/favourites_view.dart';
 import '../screens/home/home_view.dart';
 
 class NavigationBarScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:philo_task/ProductInfo.dart';
-import 'package:philo_task/presentation/screens/features/Favorites/presentation/pages/favourites_view.dart';
+import 'package:philo_task/presentation/screens/Favorites/presentation/pages/favourites_view.dart';
 import 'package:philo_task/presentation/screens/home/home_view.dart';
 import 'package:philo_task/presentation/screens/login_screen/login_view.dart';
 import 'package:philo_task/presentation/screens/register_screen/register_view.dart';

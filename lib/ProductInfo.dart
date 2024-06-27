@@ -8,7 +8,7 @@ import 'package:philo_task/providers/chat_provider.dart';
 
 import 'models/product.dart';
 import 'presentation/screens/chat/GroupChatScreen.dart';
-import 'presentation/screens/features/Favorites/presentation/bloc/favorites_bloc.dart';
+import 'presentation/screens/Favorites/presentation/bloc/favorites_bloc.dart';
 
 class ProductInfo extends StatefulWidget {
   ProductInfo({Key? key});
