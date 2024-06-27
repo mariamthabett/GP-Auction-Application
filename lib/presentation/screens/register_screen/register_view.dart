@@ -98,6 +98,7 @@ class _RegisterViewState extends State<RegisterView> {
           ),
           16.verticalSpace,
           PersonalTextField(
+            isPassword: true,
             controller: passwordController,
             validator: (p0) {
               if (p0!.isEmpty) {
@@ -116,10 +117,10 @@ class _RegisterViewState extends State<RegisterView> {
                 fontFamily: 'Familiar Pro',
               ),
             ),
-            obscureText: true,
           ),
           16.verticalSpace,
           PersonalTextField(
+            isPassword: true,
             controller: confirmPasswordController,
             validator: (p0) {
               if (p0!.isEmpty) {
@@ -138,7 +139,6 @@ class _RegisterViewState extends State<RegisterView> {
                 fontFamily: 'Familiar Pro',
               ),
             ),
-            obscureText: true,
             suffixIcon: Icon(
               Icons.visibility,
               color: ColorManager.myBlack,

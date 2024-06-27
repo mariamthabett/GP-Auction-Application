@@ -65,6 +65,7 @@ class _LoginViewState extends State<LoginView> {
           ),
           16.verticalSpace,
           PersonalTextField(
+            isPassword: true,
             validator: (p0) {
               if (p0!.isEmpty) {
                 return 'Password is required';
