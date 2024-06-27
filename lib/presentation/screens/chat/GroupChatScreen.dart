@@ -2,10 +2,12 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:philo_task/presentation/screens/chat/checkout_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../../ProductInfo.dart';
 import '../../../providers/chat_provider.dart';
 
 class GroupChatScreen extends StatelessWidget {
@@ -156,6 +158,19 @@ class _NonRaisedHandUI extends State<NonRaisedHandUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.groupName),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductInfo(
+                      // userID: '1',
+                      // userName: widget.userName,
+                      )),
+            );
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Column(
         children: [
@@ -309,29 +324,6 @@ final countDownController = CountDownController();
 
 class _MessageListState extends State<MessageList> {
   double highestPrice = 0.0;
-  String highestBidder = '';
-
-  Future<double> _getHighestPrice() async {
-    double tempHighestPrice = 0.0;
-
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('groups')
-        .doc(widget.groupId)
-        .collection('messages')
-        .orderBy('timestamp', descending: true)
-        .get();
-
-    snapshot.docs.forEach((DocumentSnapshot document) {
-      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-      double price = double.parse(data['message'] ?? 0);
-      if (price > tempHighestPrice) {
-        tempHighestPrice = price;
-        highestBidder = data['senderId'];
-      }
-    });
-
-    return tempHighestPrice;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -380,28 +372,19 @@ class _MessageListState extends State<MessageList> {
                       isReverseAnimation: true,
                       onComplete: () async {
                         if (timerProvider.remainingTime == 0) {
-                          double highestPrice = await _getHighestPrice();
-                          print('--------------------------------');
-                          print(highestPrice);
                           Fluttertoast.showToast(
                             msg: "Mazad Ended",
                             gravity: ToastGravity.CENTER,
                             backgroundColor: Colors.green,
                             fontSize: 22,
                           );
-                          if (widget.userName == highestBidder) {
-                            Navigator.pushReplacement(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CheckoutScreen(
-                                highestPrice: highestPrice.toString(),
-                                userName: widget.userName,
-                                groupId: widget.groupId,
-                              );
-                            }));
-                          } else {
-                            Navigator.pop(context);
-                            timerProvider.changeTimer(timerProvider.chatTime);
-                          }
+
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return CheckoutScreen(
+                              groupId: widget.groupId,
+                            );
+                          }));
                         }
                       },
                       onStart: () {
@@ -544,7 +527,7 @@ class _RaisedHandMessageInput extends State<RaisedHandMessageInput> {
 
     for (var doc in snapshot.docs) {
       var data = doc.data();
-
+      context.read<ChatProvider>().setLastMessage(data);
       var messageText = data['message'];
 
       final intMessage = int.parse(messageText);

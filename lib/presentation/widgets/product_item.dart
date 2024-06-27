@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:philo_task/presentation/screens/Favorites/presentation/bloc/favorites_bloc.dart';
+import 'package:philo_task/presentation/screens/features/Favorites/presentation/bloc/favorites_bloc.dart';
 
 import 'custom_image.dart';
 import '../../models/product.dart';

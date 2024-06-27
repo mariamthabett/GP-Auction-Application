@@ -46,7 +46,7 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> map) {
     return ProductModel(
-      sId: map['sid'] ?? '',
+      sId: Uuid().v4(),
       title: map['title'] ?? '',
       price: map['price'] ?? '',
       image: map['image'] ?? '',

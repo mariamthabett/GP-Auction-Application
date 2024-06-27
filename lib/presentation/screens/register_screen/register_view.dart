@@ -7,7 +7,6 @@ import 'package:philo_task/core/res/color_manger.dart';
 import 'package:philo_task/models/user_model.dart';
 import 'package:philo_task/providers/chat_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../widgets/bottom_text_button.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -66,7 +65,7 @@ class _RegisterViewState extends State<RegisterView> {
               'Email',
               style: TextStyle(
                   color: ColorManager.myLightBlack, fontFamily: 'Familiar Pro'),
-            ),
+            ), obscureText: false,
           ),
           16.verticalSpace,
           PersonalTextField(
@@ -82,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
               'Username',
               style: TextStyle(
                   color: ColorManager.myLightBlack, fontFamily: 'Familiar Pro'),
-            ),
+            ), obscureText: false,
           ),
           16.verticalSpace,
           PhoneCountryTextField(
@@ -99,7 +98,6 @@ class _RegisterViewState extends State<RegisterView> {
           ),
           16.verticalSpace,
           PersonalTextField(
-            isPassword: true,
             controller: passwordController,
             validator: (p0) {
               if (p0!.isEmpty) {
@@ -118,10 +116,10 @@ class _RegisterViewState extends State<RegisterView> {
                 fontFamily: 'Familiar Pro',
               ),
             ),
+            obscureText: true,
           ),
           16.verticalSpace,
           PersonalTextField(
-            isPassword: true,
             controller: confirmPasswordController,
             validator: (p0) {
               if (p0!.isEmpty) {
@@ -140,6 +138,7 @@ class _RegisterViewState extends State<RegisterView> {
                 fontFamily: 'Familiar Pro',
               ),
             ),
+            obscureText: true,
             suffixIcon: Icon(
               Icons.visibility,
               color: ColorManager.myBlack,
@@ -152,21 +151,21 @@ class _RegisterViewState extends State<RegisterView> {
                 if (_formKey.currentState!.validate()) {
                   DatabaseHelper.createUser(
                     UserModel(
-                      id: Uuid().v4(),
+                      id: '1',
                       email: emailController.text,
                       password: passwordController.text,
                       confirmPassword: confirmPasswordController.text,
                       name: usernameController.text,
                     ),
                   );
-                  Provider.of<ChatProvider>(context, listen: false).userModel =
-                      UserModel(
-                    id: Uuid().v4(),
-                    email: emailController.text,
-                    password: passwordController.text,
-                    confirmPassword: confirmPasswordController.text,
-                    name: usernameController.text,
-                  );
+                  // Provider.of<ChatProvider>(context, listen: false).userModel =
+                  //     UserModel(
+                  //   id: '1',
+                  //   email: emailController.text,
+                  //   password: passwordController.text,
+                  //   confirmPassword: confirmPasswordController.text,
+                  //   name: usernameController.text,
+                  // );
                 }
               }),
           SizedBox(

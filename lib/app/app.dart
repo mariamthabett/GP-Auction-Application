@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:philo_task/core/constants/constants.dart';
 import 'package:philo_task/core/internet/internet_connection_checker.dart';
 import 'package:philo_task/core/theming/theme_manager.dart';
-import 'package:philo_task/presentation/screens/Favorites/presentation/bloc/favorites_bloc.dart';
+import 'package:philo_task/presentation/screens/features/Favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:provider/provider.dart';
 import '../core/navigator/navigator.dart';
 import '../core/navigator/route_generator.dart';
